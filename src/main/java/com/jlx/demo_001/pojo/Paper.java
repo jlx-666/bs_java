@@ -1,13 +1,26 @@
 package com.jlx.demo_001.pojo;
 
+
+
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.util.ArrayList;
 
 public class Paper {
+    @JSONField(name = "choices")
     private ArrayList<Choice> choices;
+    @JSONField(name = "blanks")
     private ArrayList<Blanks> blanks;
+    @JSONField(name = "wordProblems")
     private ArrayList<WordProblem> wordProblems;
+    @JSONField(name = "fitness")
     private double fitness;
+    @JSONField(name = "difficulty")
     private double difficulty;
+
+    public static int countChoice = 10;                         //试卷选择题数量
+    public static int countBlanks = 15;                         //试卷填空题数量
+    public static int countWordProblem = 5;                     //试卷应用题数量
 
 
     public Paper() {
@@ -24,6 +37,14 @@ public class Paper {
         this.blanks = blanks;
         this.wordProblems = wordProblems;
         this.fitness = fitness;
+    }
+
+    public Paper(ArrayList<Choice> choices, ArrayList<Blanks> blanks, ArrayList<WordProblem> wordProblems, double fitness, double difficulty) {
+        this.choices = choices;
+        this.blanks = blanks;
+        this.wordProblems = wordProblems;
+        this.fitness = fitness;
+        this.difficulty = difficulty;
     }
 
     public ArrayList<Choice> getChoices() {

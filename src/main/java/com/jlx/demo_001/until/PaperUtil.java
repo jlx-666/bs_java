@@ -1,10 +1,23 @@
 package com.jlx.demo_001.until;
 
+import com.jlx.demo_001.DAO.BlanksRepository;
+import com.jlx.demo_001.DAO.ChoiceRepository;
+import com.jlx.demo_001.DAO.WordProblemRepository;
 import com.jlx.demo_001.pojo.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+@Component
 public class PaperUtil {
+    @Autowired
+    ChoiceRepository choiceRepository;
+    @Autowired
+    BlanksRepository blanksRepository;
+    @Autowired
+    WordProblemRepository wordProblemRepository;
+
     public PaperBase changeIntoIdString(Paper paper){
         String choiceIdString,blanksIdString,wordProblemIdString;
         StringBuffer idTemp = new StringBuffer();
@@ -26,9 +39,42 @@ public class PaperUtil {
         }
         wordProblemIdString = idTemp.toString();
 
-        PaperBase pb = new PaperBase("",choiceIdString,blanksIdString,wordProblemIdString,countDifficulty(paper));
+        PaperBase pb = new PaperBase("标题",choiceIdString,blanksIdString,wordProblemIdString,countDifficulty(paper));
         return pb;
     }
+
+    public Paper paperBaseChangeIntoPaper(PaperBase paperBase){
+        String[] choiceId,blankId,wpId;
+        ArrayList<Choice> choices = new ArrayList<>();
+        ArrayList<Blanks> blanks = new ArrayList<>();
+        ArrayList<WordProblem> wordProblems = new ArrayList<>();
+        Paper paper = new Paper();
+        choiceId = paperBase.getChoiceId().split(",");
+        for (String cId:choiceId){
+            int id = Integer.parseInt(cId.trim());
+            Choice c = choiceRepository.findById(id).get();
+            choices.add(c);
+        }
+        blankId = paperBase.getBlanksId().split(",");
+        for (String bId:blankId){
+            int id = Integer.parseInt(bId.trim());
+            Blanks b = blanksRepository.findById(id).get();
+            blanks.add(b);
+        }
+        wpId = paperBase.getWordProblemsId().split(",");
+        for (String wId:wpId){
+            int id = Integer.parseInt(wId.trim());
+            WordProblem w = wordProblemRepository.findById(id).get();
+            wordProblems.add(w);
+        }
+        paper.setChoices(choices);
+        paper.setBlanks(blanks);
+        paper.setWordProblems(wordProblems);
+        paper.setDifficulty(paperBase.getDifficulty());
+        return paper;
+    }
+
+
     public double countDifficulty(Paper paper){
         double difficulty = 0.00;
         ArrayList<Choice> choices = paper.getChoices();

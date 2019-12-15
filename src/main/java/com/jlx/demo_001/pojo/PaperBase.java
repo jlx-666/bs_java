@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class PaperBase {
 
     @Id
-
+    @GeneratedValue()
     int id;
     @Column
     private String title;

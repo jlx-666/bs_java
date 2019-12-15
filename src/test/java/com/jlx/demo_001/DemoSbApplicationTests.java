@@ -2,6 +2,7 @@ package com.jlx.demo_001;
 
 import com.jlx.demo_001.DAO.*;
 import com.jlx.demo_001.pojo.Choice;
+import com.jlx.demo_001.pojo.Paper;
 import com.jlx.demo_001.server.impl.GAImpl;
 import com.jlx.demo_001.until.PaperUtil;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,8 @@ import java.util.Set;
 
 @SpringBootTest
 public class DemoSbApplicationTests {
-
-
+    @Autowired
+    private  PaperMarketRepository paperMarketRepository;
     @Autowired
     private BlanksRepository br ;
     @Autowired
@@ -29,6 +30,10 @@ public class DemoSbApplicationTests {
     void contextLoads() {
         PaperUtil paperUtil = new PaperUtil();
         Choice c = new Choice();
+        for (int i=0;i<10;i++){
+            double difficulty = getRandom();
+        Paper paper = ga.getPaperByGA(difficulty);
+        paperMarketRepository.save(paperUtil.changeIntoIdString(paper));}
        /* for(int i=1;i<=1000;i++){
             c = cr.findById(i).get();
             c.setTitle("这是第"+i+"题");
@@ -67,13 +72,13 @@ public class DemoSbApplicationTests {
         WordProblem w = new WordProblem();
         w.setDifficult(getRandom());
         wr.save(w);
-    }
+    }*/
     double getRandom(){
         Random rand=new Random();
-        int i = (int)(Math.random()*80+10);
+        int i = (int)(Math.random()*10+50);
         double num = i/100.0;
         return num;
     }
-*/
+
 
 }
