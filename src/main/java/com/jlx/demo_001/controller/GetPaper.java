@@ -2,6 +2,7 @@ package com.jlx.demo_001.controller;
 
 import com.alibaba.fastjson.JSON;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.jlx.demo_001.DAO.PaperMarketRepository;
@@ -14,10 +15,8 @@ import com.jlx.demo_001.until.PaperUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -36,26 +35,16 @@ public class GetPaper {
     public Paper getGA(double difficulty){
         System.out.println(difficulty);
         Paper paper = ga.getPaperByGA(difficulty);
-        paperMarketRepository.save(paperUtil.changeIntoIdString(paper));
         return paper;
     }
 
 
-    @RequestMapping("/savePaper")
-    public Choice savePaper(@RequestBody JSONObject paper) {
-        String a = paper.toJSONString();
-
-
-        System.out.println("a"+StringEscapeUtils.unescapeJava(a));
-        Choice paper1 = JSONObject.parseObject(a,new TypeReference<Choice>(){});
-
-        System.out.println("Json"+paper1.toString());
-
-        //System.out.println("对象"+paper1.toString());
-        return paper1;
-        /*PaperBase paperBase;
-        paperBase = paperUtil.changeIntoIdString(paper);
-        paperMarketRepository.save(paperBase);*/
+    @RequestMapping(value = "/savePaper", method = RequestMethod.POST )
+    public void savePaper(@RequestBody JSONObject paperJson) {
+        Paper paper = JSONObject.parseObject(paperJson.get("paper").toString(),Paper.class);
+        PaperBase paperBase = paperUtil.changeIntoIdString(paper);
+        paperMarketRepository.save(paperBase);
+        System.out.println("save success");
     }
 
     @RequestMapping("/getPaperIds")
