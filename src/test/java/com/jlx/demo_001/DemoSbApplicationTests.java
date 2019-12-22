@@ -1,17 +1,14 @@
 package com.jlx.demo_001;
 
 import com.jlx.demo_001.DAO.*;
-import com.jlx.demo_001.pojo.Choice;
-import com.jlx.demo_001.pojo.Paper;
+import com.jlx.demo_001.server.impl.CollectionsServiceImpl;
 import com.jlx.demo_001.server.impl.GAImpl;
-import com.jlx.demo_001.until.PaperUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 @SpringBootTest
 public class DemoSbApplicationTests {
@@ -24,17 +21,28 @@ public class DemoSbApplicationTests {
     @Autowired
     private WordProblemRepository wr;
     @Autowired
+    private CollectionsRepository collectionsRepository;
+    @Autowired
     GAImpl ga;
+    @Autowired
+    CollectionsServiceImpl collectionsService;
+
 
     @Test
     void contextLoads() {
-        PaperUtil paperUtil = new PaperUtil();
+
+        //System.out.println(collectionsRepository.findCollectionsByOpenId("o1PFH4-_5S71Wp4swBpfAMMPn40A"));
+        Map<Integer,String> map = collectionsService.getAnswer("o1PFH4-_5S71Wp4swBpfAMMPn40A",1010);
+        System.out.println(map);
+        map.put(9,"l");
+        System.out.println(map);
+        /* PaperUtil paperUtil = new PaperUtil();
         Choice c = new Choice();
         for (int i=0;i<10;i++){
             double difficulty = getRandom();
         Paper paper = ga.getPaperByGA(difficulty);
         paperMarketRepository.save(paperUtil.changeIntoIdString(paper));}
-       /* for(int i=1;i<=1000;i++){
+       for(int i=1;i<=1000;i++){
             c = cr.findById(i).get();
             c.setTitle("这是第"+i+"题");
             c.setOpA("选项A");

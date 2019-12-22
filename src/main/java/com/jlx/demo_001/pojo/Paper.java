@@ -7,6 +7,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import java.util.ArrayList;
 
 public class Paper {
+    private  int id;
     @JSONField(name = "choices")
     private ArrayList<Choice> choices;
     @JSONField(name = "blanks")
@@ -45,6 +46,23 @@ public class Paper {
         this.wordProblems = wordProblems;
         this.fitness = fitness;
         this.difficulty = difficulty;
+    }
+
+    public Paper(int id, ArrayList<Choice> choices, ArrayList<Blanks> blanks, ArrayList<WordProblem> wordProblems, double fitness, double difficulty) {
+        this.id = id;
+        this.choices = choices;
+        this.blanks = blanks;
+        this.wordProblems = wordProblems;
+        this.fitness = fitness;
+        this.difficulty = difficulty;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public ArrayList<Choice> getChoices() {

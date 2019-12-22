@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 
 @RestController
-public class GetPaper {
+public class PaperController {
     @Autowired
     GA ga;
     @Autowired
@@ -64,6 +64,7 @@ public class GetPaper {
     public Paper getPaperById(int id){
         PaperBase paperBase = paperMarketRepository.findById(id).get();
         Paper paper = paperUtil.paperBaseChangeIntoPaper(paperBase);
+        paper.setId(id);
         return paper;
     }
 }

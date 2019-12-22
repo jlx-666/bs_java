@@ -6,10 +6,11 @@ import com.jlx.demo_001.DAO.WordProblemRepository;
 import com.jlx.demo_001.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-@Component
+@Service
 public class PaperUtil {
     @Autowired
     ChoiceRepository choiceRepository;
