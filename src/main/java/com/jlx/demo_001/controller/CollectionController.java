@@ -1,6 +1,9 @@
 package com.jlx.demo_001.controller;
 
 
+import com.jlx.demo_001.pojo.Collection;
+import com.jlx.demo_001.pojo.PaperBase;
+import com.jlx.demo_001.server.PaperService;
 import com.jlx.demo_001.server.impl.CollectionsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,12 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
 public class CollectionController {
     @Autowired
     CollectionsServiceImpl collectionsService;
+    @Autowired
+    PaperService paperService;
 
 
     @RequestMapping("/addCollection")
@@ -41,4 +47,10 @@ public class CollectionController {
     public void dropCollection(String openId,int paperId){
         collectionsService.drop(openId, paperId);
     }
+
+    @RequestMapping("/getMyCollections")                                              //与Paper模块耦合
+    public ArrayList<PaperBase> getMyCollections(String openId){
+        return paperService.findPaperBasesByCollections(collectionsService.getByOpenId(openId));
+    }
+
 }

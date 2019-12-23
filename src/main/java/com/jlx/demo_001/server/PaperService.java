@@ -1,7 +1,8 @@
-package com.jlx.demo_001.until;
+package com.jlx.demo_001.server;
 
 import com.jlx.demo_001.DAO.BlanksRepository;
 import com.jlx.demo_001.DAO.ChoiceRepository;
+import com.jlx.demo_001.DAO.PaperMarketRepository;
 import com.jlx.demo_001.DAO.WordProblemRepository;
 import com.jlx.demo_001.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class PaperUtil {
+public class PaperService {
+    @Autowired
+    PaperMarketRepository paperMarketRepository;
     @Autowired
     ChoiceRepository choiceRepository;
     @Autowired
@@ -92,4 +95,15 @@ public class PaperUtil {
         }
         return difficulty/100;
     }
+
+    public ArrayList<PaperBase> findPaperBasesByCollections(ArrayList<Collection> collections){
+        ArrayList<PaperBase> paperBases = new ArrayList<>();
+        for(Collection c : collections){
+            PaperBase paperBase = new PaperBase();
+            paperBase = paperMarketRepository.findById(c.getPaperId()).get();
+            paperBases.add(paperBase);
+        }
+        return paperBases;
+    }
+
 }

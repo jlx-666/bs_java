@@ -1,21 +1,11 @@
 package com.jlx.demo_001.controller;
 
-import com.alibaba.fastjson.JSON;
-
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.jlx.demo_001.DAO.PaperMarketRepository;
-import com.jlx.demo_001.pojo.Choice;
-import com.jlx.demo_001.pojo.Paper;
-import com.jlx.demo_001.pojo.PaperBase;
-import com.jlx.demo_001.pojo.WordProblem;
+import com.jlx.demo_001.pojo.*;
 import com.jlx.demo_001.server.GA;
-import com.jlx.demo_001.until.PaperUtil;
-import org.apache.commons.lang.StringEscapeUtils;
+import com.jlx.demo_001.server.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,7 +16,7 @@ public class PaperController {
     @Autowired
     GA ga;
     @Autowired
-    PaperUtil paperUtil;
+    PaperService paperService;
     @Autowired
     PaperMarketRepository paperMarketRepository;
 
@@ -42,7 +32,7 @@ public class PaperController {
     @RequestMapping(value = "/savePaper", method = RequestMethod.POST )
     public void savePaper(@RequestBody JSONObject paperJson) {
         Paper paper = JSONObject.parseObject(paperJson.get("paper").toString(),Paper.class);
-        PaperBase paperBase = paperUtil.changeIntoIdString(paper);
+        PaperBase paperBase = paperService.changeIntoIdString(paper);
         paperMarketRepository.save(paperBase);
         System.out.println("save success");
     }
@@ -60,11 +50,17 @@ public class PaperController {
         return  paperBases;
     }
 
+    @RequestMapping("/getPaperInfoByCollections")
+    public ArrayList<PaperBase> getPaperInfoByCollections(ArrayList<Collection> collections){
+        return null;
+    }
+
     @RequestMapping("/getById")
     public Paper getPaperById(int id){
         PaperBase paperBase = paperMarketRepository.findById(id).get();
-        Paper paper = paperUtil.paperBaseChangeIntoPaper(paperBase);
+        Paper paper = paperService.paperBaseChangeIntoPaper(paperBase);
         paper.setId(id);
         return paper;
     }
+
 }
