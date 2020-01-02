@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 public class LoginController {
     @RequestMapping("/login")
-    public String loginJuege(String openid){
-        System.out.println(openid);
+    public String loginJudge(String openid){
         String a = "ok";
         return a;
     }

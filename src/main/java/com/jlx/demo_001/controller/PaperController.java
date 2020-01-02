@@ -46,7 +46,6 @@ public class PaperController {
             PaperBase paperBase = paperMarketRepository.findById(id).get();
             paperBases.add(paperBase);
         }
-        System.out.println(paperBases);
         return  paperBases;
     }
 

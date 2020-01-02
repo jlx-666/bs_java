@@ -1,6 +1,7 @@
 package com.jlx.demo_001;
 
 import com.jlx.demo_001.DAO.*;
+import com.jlx.demo_001.server.ClassService;
 import com.jlx.demo_001.server.impl.CollectionsServiceImpl;
 import com.jlx.demo_001.server.impl.GAImpl;
 import org.junit.jupiter.api.Test;
@@ -26,16 +27,15 @@ public class DemoSbApplicationTests {
     GAImpl ga;
     @Autowired
     CollectionsServiceImpl collectionsService;
+    @Autowired
+    ClassService classService;
 
 
     @Test
     void contextLoads() {
 
         //System.out.println(collectionsRepository.findCollectionsByOpenId("o1PFH4-_5S71Wp4swBpfAMMPn40A"));
-        Map<Integer,String> map = collectionsService.getAnswer("o1PFH4-_5S71Wp4swBpfAMMPn40A",1010);
-        System.out.println(map);
-        map.put(9,"l");
-        System.out.println(map);
+        System.out.println(collectionsService.getByOpenId("").size());
         /* PaperUtil paperUtil = new PaperUtil();
         Choice c = new Choice();
         for (int i=0;i<10;i++){
