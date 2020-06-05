@@ -10,21 +10,22 @@ public class Class_stuKey implements Serializable {
     private String openid;
     @Id
     @Column
-    private int class_id;
+    private int classId;
 
-    public String getOpenId() {
+
+    public String getOpenid() {
         return openid;
     }
 
-    public void setOpenId(String openId) {
-        this.openid = openId;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
-    public int getClass_id() {
-        return class_id;
+    public int getClassId() {
+        return classId;
     }
 
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
+    public void setClassId(int classId) {
+        this.classId = classId;
     }
 }

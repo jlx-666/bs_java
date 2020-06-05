@@ -1,14 +1,11 @@
 package com.jlx.demo_001.controller;
 
 
-import com.jlx.demo_001.pojo.Collection;
 import com.jlx.demo_001.pojo.PaperBase;
-import com.jlx.demo_001.server.PaperService;
-import com.jlx.demo_001.server.impl.CollectionsServiceImpl;
+import com.jlx.demo_001.service.PaperService;
+import com.jlx.demo_001.service.impl.CollectionsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;

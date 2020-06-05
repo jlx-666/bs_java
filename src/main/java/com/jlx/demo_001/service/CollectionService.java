@@ -1,4 +1,4 @@
-package com.jlx.demo_001.server;
+package com.jlx.demo_001.service;
 
 import com.jlx.demo_001.pojo.Collection;
 

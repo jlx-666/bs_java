@@ -11,18 +11,18 @@ import javax.persistence.IdClass;
 @IdClass(Class_stuKey.class)
 public class Class_stu {
     @Id
-    private int class_id;
+    private int classId;
     @Id
     private String openid;
     @Column
     private double grade;
 
-    public int getClass_id() {
-        return class_id;
+    public int getClassId() {
+        return classId;
     }
 
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
+    public void setClassId(int class_id) {
+        this.classId = class_id;
     }
 
     public String getOpenid() {

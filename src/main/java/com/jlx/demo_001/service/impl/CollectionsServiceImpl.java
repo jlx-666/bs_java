@@ -1,24 +1,30 @@
-package com.jlx.demo_001.server.impl;
+package com.jlx.demo_001.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.jlx.demo_001.DAO.CollectionsRepository;
+import com.jlx.demo_001.DAO.PaperMarketRepository;
 import com.jlx.demo_001.pojo.Collection;
+import com.jlx.demo_001.pojo.Paper;
+import com.jlx.demo_001.pojo.PaperBase;
 import com.jlx.demo_001.pojo.primaryKey.CollectionKey;
-import com.jlx.demo_001.server.CollectionService;
+import com.jlx.demo_001.service.CollectionService;
+import com.jlx.demo_001.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class CollectionsServiceImpl implements CollectionService {
     @Autowired
     CollectionsRepository collectionsRepository;
+    @Autowired
+    PaperService paperService;
+    @Autowired
+    PaperMarketRepository paperMarketRepository;
+
 
     @Override
     public ArrayList<Collection> getByOpenId(String openId) {
@@ -84,5 +90,9 @@ public class CollectionsServiceImpl implements CollectionService {
         collectionKey.setPaperId(paperId);
         collectionsRepository.deleteById(collectionKey);
     }
-
+    public void saveAutoPaper(JSONObject paperJson,String openid){
+        Paper paper = JSONObject.parseObject(paperJson.get("paper").toString(),Paper.class);
+        PaperBase paperBase = paperMarketRepository.save(paperService.changeIntoIdString(paper));
+        add(openid,paperBase.getId());
+    }
 }

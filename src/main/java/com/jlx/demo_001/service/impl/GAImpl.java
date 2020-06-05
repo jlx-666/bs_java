@@ -1,4 +1,4 @@
-package com.jlx.demo_001.server.impl;
+package com.jlx.demo_001.service.impl;
 
 import com.jlx.demo_001.DAO.BlanksRepository;
 import com.jlx.demo_001.DAO.ChoiceRepository;
@@ -7,11 +7,13 @@ import com.jlx.demo_001.pojo.Blanks;
 import com.jlx.demo_001.pojo.Choice;
 import com.jlx.demo_001.pojo.Paper;
 import com.jlx.demo_001.pojo.WordProblem;
-import com.jlx.demo_001.server.GA;
+import com.jlx.demo_001.service.GA;
+import com.jlx.demo_001.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -22,11 +24,15 @@ public class GAImpl implements GA {
     private ChoiceRepository choiceRepository;
     @Autowired
     private WordProblemRepository wordProblemRepository;
+    @Autowired
+    PaperService paperService;
     private double aimDifficulty;
     private ArrayList<Paper> papers;
+    private int countChoice;
 
     @Override
-    public Paper getPaperByGA(Double difficult) {
+    public Paper getPaperByGA(Double difficult,int countchoice) {
+        countChoice = countchoice;
         long startTime;long endTime;
         aimDifficulty = difficult;
         Paper bestOne = null;
@@ -62,9 +68,15 @@ public class GAImpl implements GA {
             bestOne = papers.get(map.get(maxFit));
             bestOne.setFitness(countFitness(bestOne));
             endTime = System.currentTimeMillis();
+            System.out.println(bestOne.getFitness());
+            System.out.println(bestOne.getFitness()*aimDifficulty);
             System.out.println("本次查找迭代"+turn+"次"+"\n用时"+(endTime-startTime)+"ms");
         }
-        bestOne.setDifficulty(bestOne.getFitness()*aimDifficulty);
+        double d = paperService.countDifficulty(bestOne);
+        BigDecimal bg = new BigDecimal(d);
+        double difficulty = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        bestOne.setDifficulty(difficulty);
+        System.out.println(difficulty+"diff");
         System.out.println(bestOne);
         return bestOne;
     }
@@ -107,7 +119,6 @@ public class GAImpl implements GA {
                     newPopulationNum.add(i);
                     break roll;
                 }
-
             }
         }while (newPopulationNum.size()<population);
         for(int num:newPopulationNum){
@@ -157,7 +168,7 @@ public class GAImpl implements GA {
                 newId.set(j,-1);
                 boolean varOK = false;
                 for (;!varOK;){
-                    int varId = getOneRandomId("choice");
+                    int varId = choiceRepository.findRandomId();
                     if(!newId.contains(varId)){
                         newId.set(j,varId);
                         choices.set(j,choiceRepository.findById(varId).get());
@@ -228,10 +239,18 @@ public class GAImpl implements GA {
 
 
     private ArrayList<Choice> getChoice() {
+        int count = choiceRepository.countMaxChoice();
+        int length = countChoice;
+        Set<Integer> ids = new HashSet();
+        int z=0;
+        while(ids.size()<length){
+            System.out.println(choiceRepository.findRandomId());
+            z++;
+           ids.add(choiceRepository.findRandomId());
+        }
+        System.out.println("次数："+z);
         ArrayList<Choice> choices = new ArrayList<>();
-        int[] id = getRandomId("choice");
-        for(int i:id){
-
+        for(int i:ids){
           Choice c = choiceRepository.findById(i).get();
           choices.add(c);
         }
@@ -374,7 +393,7 @@ public class GAImpl implements GA {
         for (WordProblem w : wordProblems){
             difficulty += w.getDifficult()*WordProblem.number;
         }
-        return 1-(Math.abs(100*aimDifficulty-difficulty)/100*aimDifficulty);
+        return 1-(Math.abs(choices.size()*Choice.number*aimDifficulty-difficulty)/choices.size()*Choice.number*aimDifficulty);
     }
 
     private int getOneRandomId(String type){
@@ -407,7 +426,7 @@ public class GAImpl implements GA {
             case "choice":
                 count = choiceRepository.countMaxChoice();
                 length = countChoice;
-                break;
+            break;
             case "blanks":
                 count = blanksRepository.countMaxBlanks();
                 length = countBlanks;

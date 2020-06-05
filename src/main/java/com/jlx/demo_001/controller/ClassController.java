@@ -1,10 +1,9 @@
 package com.jlx.demo_001.controller;
 
 import com.jlx.demo_001.pojo.ClassForStu;
-import com.jlx.demo_001.server.ClassService;
+import com.jlx.demo_001.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -15,9 +14,9 @@ public  class ClassController {
     ClassService classService;
 
     @RequestMapping("/addClass")
-    public void addClass(String openid,String name){
+    public ClassForStu addClass(String openid,String name){
         System.out.println(openid+"and"+name);
-        classService.add(openid,name);
+        return classService.add(openid,name);
     }
 
     @RequestMapping("/getMyFound")
@@ -47,10 +46,10 @@ public  class ClassController {
         classService.join(openId,classId);
     }
 
-    /*@RequestMapping("/getMemberIds")
+    @RequestMapping("/getMemberIds")
     public ArrayList<String> getMember(int classId){
         return classService.getMember(classId);
-    }*/
+    }
 
 
 }

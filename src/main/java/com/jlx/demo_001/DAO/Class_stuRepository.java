@@ -9,5 +9,5 @@ import java.util.ArrayList;
 
 public interface Class_stuRepository extends JpaSpecificationExecutor<Class_stu>,CrudRepository<Class_stu, Class_stuKey> {
     ArrayList<Class_stu> findClass_stusByOpenid(String openid);
-    //ArrayList<Class_stu> findClass_stusByClass_id(int classId);
+    ArrayList<Class_stu> findClass_stusByClassId(int classId);
 }

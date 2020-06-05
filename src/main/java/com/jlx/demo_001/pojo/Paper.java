@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class Paper {
     private  int id;
+    @JSONField(name = "title")
+    private String title;
     @JSONField(name = "choices")
     private ArrayList<Choice> choices;
     @JSONField(name = "blanks")
@@ -63,6 +65,14 @@ public class Paper {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public ArrayList<Choice> getChoices() {
