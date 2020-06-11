@@ -2,6 +2,7 @@ package com.jlx.demo_001.controller;
 
 import com.jlx.demo_001.pojo.ClassForStu;
 import com.jlx.demo_001.service.ClassService;
+import com.jlx.demo_001.service.HomeworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 public  class ClassController {
     @Autowired
     ClassService classService;
+    @Autowired
+    HomeworkService homeworkService;
 
     @RequestMapping("/addClass")
     public ClassForStu addClass(String openid,String name){
@@ -51,5 +54,17 @@ public  class ClassController {
         return classService.getMember(classId);
     }
 
+    @RequestMapping("/leaveClass")
+    public void leave(int classId,String openid){
+        homeworkService.deleHomeworkByopenid(openid);
+        classService.deleteByKey(classId, openid);
+    }
+
+    @RequestMapping("/deleteClass")
+    public void delete(int classId){
+        homeworkService.deleteHomeworkByClassId(classId);
+        classService.deleteByClassId(classId);
+        classService.deleteClass(classId);
+    }
 
 }

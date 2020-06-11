@@ -14,18 +14,17 @@ public class UserService {
     @Autowired
     UsersRepository userRepository;
 
-    public int login(String openid,String name,int type){
+    public int login(String openid,String name){
         String fistOrNot = userRepository.findById(openid).toString();
         if(fistOrNot!="Optional.empty"){
             System.out.println("不是第一次登录");
             Users users = userRepository.findById(openid).get();
-            users.setType(type);
             userRepository.save(users);
         }else{
             Users users = new Users();
             users.setOpenid(openid);
             users.setName(name);
-            users.setType(type);
+            users.setType(0);
             userRepository.save(users);
         }
         return 1;
@@ -49,5 +48,10 @@ public class UserService {
             member.add(userRepository.findById((String) obj.get(i)).get().getName());
         }
         return member;
+    }
+
+    public int getTypeById(String openid){
+        Users user = userRepository.findById(openid).get();
+        return user.getType();
     }
 }

@@ -95,4 +95,9 @@ public class CollectionsServiceImpl implements CollectionService {
         PaperBase paperBase = paperMarketRepository.save(paperService.changeIntoIdString(paper));
         add(openid,paperBase.getId());
     }
+
+    public void dropByPaperId(int paperId){
+        ArrayList<Collection> collections = collectionsRepository.findAllByPaperId(paperId);
+        collectionsRepository.deleteAll(collections);
+    }
 }

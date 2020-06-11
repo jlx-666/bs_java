@@ -36,11 +36,14 @@ public class ClassService {
         Class_stuKey class_stuKey = new Class_stuKey();
         class_stuKey.setClassId(classId);
         class_stuKey.setOpenid(openId);
-        if(classRepository.findById(classId).get().getMasterId().trim().equals(openId)){
-            return "teacher";
-        }else if(class_stuRepository.findById(class_stuKey).isPresent()){
-            return "student";
-        }else return "notJoin";
+        if(classRepository.findById(classId).isPresent()){
+            if(classRepository.findById(classId).get().getMasterId().trim().equals(openId)){
+                return "teacher";
+            }else if(class_stuRepository.findById(class_stuKey).isPresent()){
+                return "student";
+            }else return "notJoin";
+        }
+        return null;
     }
 
     public ArrayList<ClassForStu> findByOpenId(String openId){
@@ -50,7 +53,10 @@ public class ClassService {
     }
 
     public ClassForStu getById(int id){
-        return classRepository.findById(id).get();
+        if(classRepository.findById(id).isPresent()) {
+            return classRepository.findById(id).get();
+        }
+        return null;
     }
 
     public ArrayList<ClassForStu> getJoin(String openid){
@@ -71,4 +77,19 @@ public class ClassService {
         return member;
     }
 
+    public void deleteByKey(int classId,String openid){
+        Class_stuKey class_stuKey = new Class_stuKey();
+        class_stuKey.setOpenid(openid);
+        class_stuKey.setClassId(classId);
+        class_stuRepository.deleteById(class_stuKey);
+    }
+
+    public void deleteByClassId(int classId){
+        ArrayList<Class_stu> class_stus = class_stuRepository.findClass_stusByClassId(classId);
+        class_stuRepository.deleteAll(class_stus);
+    }
+
+    public void deleteClass(int classId){
+        classRepository.deleteById(classId);
+    }
 }

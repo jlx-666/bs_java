@@ -1,6 +1,7 @@
 package com.jlx.demo_001;
 
 import com.jlx.demo_001.DAO.*;
+import com.jlx.demo_001.controller.PaperController;
 import com.jlx.demo_001.pojo.Choice;
 import com.jlx.demo_001.pojo.Paper;
 import com.jlx.demo_001.service.ClassService;
@@ -45,6 +46,8 @@ public class DemoSbApplicationTests {
     PaperService paperService;
     @Autowired
     HomeworkService homeworkService;
+    @Autowired
+    PaperController paperController;
 
     @Test
     void contextLoads() {
@@ -53,7 +56,7 @@ public class DemoSbApplicationTests {
 
         //Date date = new Date();
         //date.setTime(8640000000L);
-      System.out.println(ga.getPaperByGA(0.55,15).getChoices().size());
+      System.out.println(paperService.getMaxPage(1));
 
        /*for(int i=1;i<=5000;i++){
            Choice c = new Choice();

@@ -9,4 +9,5 @@ import java.util.ArrayList;
 
 public interface CollectionsRepository extends JpaSpecificationExecutor<Collection>, CrudRepository<Collection, CollectionKey> {
     ArrayList<Collection> findCollectionsByOpenId(String openId);
+    ArrayList<Collection> findAllByPaperId(int paperId);
 }

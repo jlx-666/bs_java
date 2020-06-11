@@ -393,7 +393,7 @@ public class GAImpl implements GA {
         for (WordProblem w : wordProblems){
             difficulty += w.getDifficult()*WordProblem.number;
         }
-        return 1-(Math.abs(choices.size()*Choice.number*aimDifficulty-difficulty)/choices.size()*Choice.number*aimDifficulty);
+        return 1-(Math.abs(choices.size()*Choice.number*aimDifficulty-difficulty)/(choices.size()*Choice.number));
     }
 
     private int getOneRandomId(String type){

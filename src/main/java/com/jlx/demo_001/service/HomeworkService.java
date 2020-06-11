@@ -3,8 +3,10 @@ package com.jlx.demo_001.service;
 import com.alibaba.fastjson.JSONObject;
 import com.jlx.demo_001.DAO.Class_stuRepository;
 import com.jlx.demo_001.DAO.HomeworkRepository;
+import com.jlx.demo_001.DAO.PaperMarketRepository;
 import com.jlx.demo_001.pojo.Class_stu;
 import com.jlx.demo_001.pojo.Homework;
+import com.jlx.demo_001.pojo.PaperBase;
 import com.jlx.demo_001.pojo.primaryKey.HomeworkKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class HomeworkService {
     Class_stuRepository class_stuRepository;
     @Autowired
     HomeworkRepository homeworkRepository;
+    @Autowired
+    PaperMarketRepository paperMarketRepository;
 
     public void add(int classId,int paperId,long how_long ){
         ArrayList<Homework> homeworkArrayList = new ArrayList<>();
@@ -113,7 +117,12 @@ public class HomeworkService {
     }
 
     public ArrayList<Integer> getPaperidListByClassid(int classId){
-        return homeworkRepository.getPaperidListByClassid(classId);
+        ArrayList<Integer> ids = homeworkRepository.getPaperidListByClassid(classId);
+        ArrayList<PaperBase> paperBaseArrayList = new ArrayList<>();
+        for (int cId : ids){
+            paperBaseArrayList.add(paperMarketRepository.findById(cId).get());
+        }
+         return ids;
     }
 
     public void changeStateByClassAndPaper(int classId,int paperId){
@@ -142,10 +151,11 @@ public class HomeworkService {
         }
     }
 
-    public ArrayList<Integer> getClassPaperListByState(int classId,String state){
+    public ArrayList<PaperBase> getClassPaperListByState(int classId,String state){
         ArrayList<Integer> over = new ArrayList<>();
         ArrayList<Integer> notOver = new ArrayList<>();
         ArrayList<Integer> all = homeworkRepository.getPaperidListByClassid(classId);
+        System.out.println("all"+all);
         for (int paperId : all){
             if(judgeHomeworkOverOrNot(classId,paperId)){
                 over.add(paperId);
@@ -154,9 +164,17 @@ public class HomeworkService {
             }
         }
         if(state.trim().equals("已完成")){
-            return over;
+            ArrayList<PaperBase> overList = new ArrayList<>();
+            for(int i:over){
+                overList.add(paperMarketRepository.findById(i).get());
+            }
+            return overList;
         }else {
-            return notOver;
+            ArrayList<PaperBase> notOverList = new ArrayList<>();
+            for(int i:notOver){
+                notOverList.add(paperMarketRepository.findById(i).get());
+            }
+            return notOverList;
         }
     }
 
@@ -203,5 +221,20 @@ public class HomeworkService {
         timeList.add(hours);
         timeList.add(minutes);
         return timeList;
+    }
+
+    public void deleteHomeworkByPaperId(int paperId){
+        ArrayList<Homework> homeworkList = homeworkRepository.findAllByPaperId(paperId);
+        homeworkRepository.deleteAll(homeworkList);
+    }
+
+    public void deleHomeworkByopenid(String openid){
+        ArrayList<Homework> homeworkList = homeworkRepository.findAllByOpenid(openid);
+        homeworkRepository.deleteAll(homeworkList);
+    }
+
+    public void deleteHomeworkByClassId(int classId){
+        ArrayList<Homework> homeworkList = homeworkRepository.findAllByClassId(classId);
+        homeworkRepository.deleteAll(homeworkList);
     }
 }

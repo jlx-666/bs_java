@@ -1,7 +1,9 @@
 package com.jlx.demo_001.controller;
 
 import com.jlx.demo_001.pojo.Homework;
+import com.jlx.demo_001.pojo.PaperBase;
 import com.jlx.demo_001.service.HomeworkService;
+import com.jlx.demo_001.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import java.util.Map;
 public class HomeworkController {
     @Autowired
     HomeworkService homeworkService;
+
 
     @RequestMapping("/addHomework")
     public void addHomework(int classId,int paperId,int how_long){
@@ -56,7 +59,9 @@ public class HomeworkController {
     @RequestMapping("/getPaperidListByClassid")
     public ArrayList<Integer> getPaperidListByClassid(int classId){
         System.out.println(homeworkService.getPaperidListByClassid(classId));
+
         return homeworkService.getPaperidListByClassid(classId);
+
     }
 
     @RequestMapping("/changeStateByClassAndPaper")
@@ -65,7 +70,7 @@ public class HomeworkController {
     }
 
     @RequestMapping("/getClassPaperListByState")
-    public ArrayList<Integer> getClassPaperListByState(int classId,String state){
+    public ArrayList<PaperBase> getClassPaperListByState(int classId,String state){
         return homeworkService.getClassPaperListByState(classId,state);
     }
 

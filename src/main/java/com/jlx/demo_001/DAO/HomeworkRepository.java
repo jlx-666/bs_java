@@ -19,6 +19,8 @@ public interface HomeworkRepository extends JpaSpecificationExecutor<Homework>, 
     ArrayList<Homework> findAllByClassIdAndPaper_idAndState(int classId,int paperId,String state);
     @Query(nativeQuery=true,value = "select * from homework where class_id = ?1 and paper_id = ?2")
     ArrayList<Homework> findAllByClassIdAndPaper_id(int classId,int paperId);
+    @Query(nativeQuery=true,value = "select * from homework where paper_id = ?1")
+    ArrayList<Homework> findAllByPaperId(int paperId);
     @Query(nativeQuery=true,value = "select distinct paper_id from homework where class_id = ?1 ")
     ArrayList<Integer> getPaperidListByClassid(int classId);
     @Query(nativeQuery=true,value = "select distinct paper_id from homework where class_id = ?1 and state = ?2")

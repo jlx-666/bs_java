@@ -17,8 +17,8 @@ public class UserController {
     UserService userService;
 
     @RequestMapping("/login")
-    public void loginJudge(String openid,String name,int type){
-        userService.login(openid, name,type);
+    public void loginJudge(String openid,String name){
+        userService.login(openid, name);
     }
 
     @RequestMapping("/saveUser")
@@ -37,4 +37,13 @@ public class UserController {
         return userService.getNameByMemberIds(memberIds);
     }
 
+    @RequestMapping("/judgeAdmin")
+    public boolean judgeAdmin(String openid){
+        int type = userService.getTypeById(openid);
+        if(type==1){
+            System.out.println("true");
+            return true;
+        }
+        return false;
+    }
 }

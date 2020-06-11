@@ -5,13 +5,14 @@ import com.jlx.demo_001.DAO.ChoiceRepository;
 import com.jlx.demo_001.DAO.PaperMarketRepository;
 import com.jlx.demo_001.DAO.WordProblemRepository;
 import com.jlx.demo_001.pojo.*;
+import com.jlx.demo_001.pojo.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PaperService {
@@ -97,7 +98,6 @@ public class PaperService {
         for (WordProblem w : wordProblems){
             difficulty += w.getDifficult()*WordProblem.number;
         }
-        System.out.println("111"+difficulty);
         return difficulty/(choices.size());
     }
 
@@ -126,5 +126,83 @@ public class PaperService {
         }
         System.out.println("paperanswer"+answer);
         return answer;
+    }
+
+    public int addChoice(String title,String opA,String opB,String opC,String opD,String answer,double difficulty){
+        Choice choice = new Choice();
+        choice.setDifficulty(difficulty);
+        choice.setAnswer(answer);
+        choice.setTitle(title);
+        choice.setOpA(opA);
+        choice.setOpB(opB);
+        choice.setOpC(opC);
+        choice.setOpD(opD);
+        Choice c = choiceRepository.save(choice);
+        return c.getId();
+    }
+    public int saveChoice(int id,String title,String opA,String opB,String opC,String opD,String answer,double difficulty){
+        Choice choice = new Choice();
+        choice.setId(id);
+        choice.setDifficulty(difficulty);
+        choice.setAnswer(answer);
+        choice.setTitle(title);
+        choice.setOpA(opA);
+        choice.setOpB(opB);
+        choice.setOpC(opC);
+        choice.setOpD(opD);
+        Choice c = choiceRepository.save(choice);
+        return c.getId();
+    }
+
+    public List<Choice> findChoicePage(Pageable pageable) {
+        Page<Choice> page = choiceRepository.findAll(pageable);
+        return page.getContent();
+    }
+
+    public long getMaxPage(int size){
+        long max = choiceRepository.count();
+        if(max%size!=0){
+            return max/size+1;
+        }
+        else return max/size;
+    }
+
+    public long getMaxPaperPage(int size){
+        long max = paperMarketRepository.count();
+        if(max%size!=0){
+            return max/size+1;
+        }
+        else return max/size;
+    }
+
+    public List<PaperBase> findPaperPage(Pageable pageable) {
+        Page<PaperBase> page = paperMarketRepository.findAll(pageable);
+        return page.getContent();
+    }
+
+    public ArrayList<PaperBase> getPaperIds(int size){
+        ArrayList<PaperBase> ids = new ArrayList<>();
+        Set<PaperBase> set = new HashSet<>();
+        for (;set.size()<size;){
+            PaperBase paperBase = paperMarketRepository.getRandomPaper();
+            set.add(paperBase);
+        }
+        for (PaperBase paperBase:set){
+            paperBase.setTitle("自动组卷习题"+paperBase.getId());
+            DecimalFormat df = new DecimalFormat("#.00");
+            double difficulty = Double.parseDouble(df.format(paperBase.getDifficulty()));
+            paperBase.setDifficulty(difficulty);
+            ids.add(paperBase);
+        }
+        return ids;
+    }
+
+    public Choice getChoiceById(int id){
+        return choiceRepository.findById(id).get();
+    }
+
+    public void deleteById(int paperId){
+        ArrayList<PaperBase> paperBases = paperMarketRepository.findAllById(paperId);
+        paperMarketRepository.deleteAll(paperBases);
     }
 }

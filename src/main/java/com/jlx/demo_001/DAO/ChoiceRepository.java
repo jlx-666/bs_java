@@ -1,6 +1,8 @@
 package com.jlx.demo_001.DAO;
 
 import com.jlx.demo_001.pojo.Choice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -17,4 +19,5 @@ public interface ChoiceRepository extends CrudRepository<Choice,Integer> {
     int test2();
     @Query(nativeQuery=true, value="SELECT id FROM choice ORDER BY RAND() LIMIT 1" )
     int findRandomId();
+    Page<Choice> findAll(Pageable pageable);
 }
